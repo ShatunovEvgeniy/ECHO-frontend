@@ -1,8 +1,10 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useUser } from '../../context/UserContext';
-import { colors, spacing } from '../../constants/theme';
-import { useState } from 'react';
+import { colors, spacing, borderRadius, shadows } from '../../constants/theme';
+import { LinearGradient } from 'expo-linear-gradient';
+import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
 
 export default function Auth() {
   const [login, setLogin] = useState('');
@@ -15,69 +17,174 @@ export default function Auth() {
       Alert.alert('Ошибка', 'Заполните все поля');
       return;
     }
-    // Имитация входа
-    setUser({ isLoggedIn: true, gems: user.gems, tickets: user.tickets, storyProgress: user.storyProgress });
-    Alert.alert('Успех', 'Вы вошли в аккаунт!');
+    setUser({ isLoggedIn: true });
+    Alert.alert('✨ Добро пожаловать!', 'Вы успешно вошли');
     router.replace('/(tabs)');
   };
 
-  const handleRegister = () => {
-    Alert.alert('Регистрация', 'Функция в разработке');
-  };
-
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>🔐 Авторизация</Text>
-      
-      <View style={styles.card}>
-        <Text style={styles.label}>Логин</Text>
-        <TextInput 
-          style={styles.input} 
-          value={login} 
-          onChangeText={setLogin} 
-          placeholder="Введите логин"
-          placeholderTextColor={colors.textLight}
-        />
-        
-        <Text style={styles.label}>Пароль</Text>
-        <TextInput 
-          style={styles.input} 
-          value={password} 
-          onChangeText={setPassword} 
-          placeholder="Введите пароль"
-          placeholderTextColor={colors.textLight}
-          secureTextEntry
-        />
-        
-        <TouchableOpacity style={styles.primaryBtn} onPress={handleLogin}>
-          <Text style={styles.primaryBtnText}>Войти</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.secondaryBtn} onPress={handleRegister}>
-          <Text style={styles.secondaryBtnText}>Создать аккаунт</Text>
-        </TouchableOpacity>
-      </View>
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={styles.container}
+    >
+      {/* Градиентный фон */}
+      <LinearGradient
+        colors={[colors.background, colors.backgroundSoft, colors.gradientEnd]}
+        style={styles.background}
+      />
 
-      {user.isLoggedIn && (
-        <View style={styles.infoCard}>
-          <Text style={styles.infoText}>✅ Вы уже авторизованы</Text>
-          <Text style={styles.infoText}>Логин: {user.name || 'Гость'}</Text>
-        </View>
-      )}
-    </ScrollView>
+      <ScrollView contentContainerStyle={styles.scroll}>
+        {/* Логотип */}
+        <Animated.View entering={FadeInDown.duration(600)} style={styles.logoSection}>
+          <View style={styles.logo}>
+            <Text style={styles.logoIcon}>📖</Text>
+          </View>
+          <Text style={styles.appName}>VN Platform</Text>
+          <Text style={styles.tagline}>Погрузись в свою историю</Text>
+        </Animated.View>
+
+        {/* Форма */}
+        <Animated.View entering={FadeInUp.delay(200)} style={styles.form}>
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Логин</Text>
+            <TextInput
+              style={styles.input}
+              value={login}
+              onChangeText={setLogin}
+              placeholder="Введите логин"
+              placeholderTextColor={colors.textDim}
+              autoCapitalize="none"
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Пароль</Text>
+            <TextInput
+              style={styles.input}
+              value={password}
+              onChangeText={setPassword}
+              placeholder="••••••••"
+              placeholderTextColor={colors.textDim}
+              secureTextEntry
+            />
+          </View>
+
+          <TouchableOpacity 
+            style={styles.forgot}
+            onPress={() => Alert.alert('Восстановление', 'Функция в разработке')}
+          >
+            <Text style={styles.forgotText}>Забыли пароль?</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.primaryBtn} onPress={handleLogin} activeOpacity={0.9}>
+            <LinearGradient
+              colors={[colors.gradientStart, colors.gradientEnd]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.primaryBtnInner}
+            >
+              <Text style={styles.primaryBtnText}>✨ Войти</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.secondaryBtn}
+            onPress={() => Alert.alert('Регистрация', 'Функция в разработке')}
+          >
+            <Text style={styles.secondaryBtnText}>Создать аккаунт</Text>
+          </TouchableOpacity>
+        </Animated.View>
+
+        {/* Статус */}
+        {user.isLoggedIn && (
+          <Animated.View entering={FadeInUp.delay(400)} style={styles.statusCard}>
+            <Text style={styles.statusIcon}>✅</Text>
+            <Text style={styles.statusText}>Вы уже авторизованы</Text>
+            <Text style={styles.statusLogin}>{user.name || 'Гость'}</Text>
+          </Animated.View>
+        )}
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background, padding: spacing.l },
-  title: { fontSize: 28, fontWeight: 'bold', color: colors.primary, marginBottom: spacing.l },
-  card: { backgroundColor: colors.surface, padding: spacing.l, borderRadius: 12, marginBottom: spacing.m },
-  label: { fontSize: 14, color: colors.textLight, marginBottom: spacing.s },
-  input: { backgroundColor: colors.background, padding: spacing.m, borderRadius: 8, marginBottom: spacing.m, borderWidth: 1, borderColor: colors.primaryLight },
-  primaryBtn: { backgroundColor: colors.primary, padding: spacing.m, borderRadius: 8, alignItems: 'center', marginTop: spacing.s },
-  primaryBtnText: { color: '#FFF', fontWeight: 'bold', fontSize: 16 },
-  secondaryBtn: { backgroundColor: colors.primaryLight, padding: spacing.m, borderRadius: 8, alignItems: 'center', marginTop: spacing.s },
-  secondaryBtnText: { color: '#FFF', fontWeight: '600', fontSize: 16 },
-  infoCard: { backgroundColor: colors.surface, padding: spacing.m, borderRadius: 12 },
-  infoText: { color: colors.text, fontSize: 14 },
+  container: { flex: 1 },
+  background: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
+  scroll: { flexGrow: 1, padding: spacing.l, justifyContent: 'center' },
+  
+  logoSection: { alignItems: 'center', marginBottom: spacing.xl },
+  logo: {
+    width: 80,
+    height: 80,
+    borderRadius: borderRadius.full,
+    backgroundColor: colors.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...shadows.glow,
+    marginBottom: spacing.m,
+  },
+  logoIcon: { fontSize: 36 },
+  appName: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: colors.text,
+    textShadowColor: colors.primaryGlow,
+    textShadowRadius: 15,
+  },
+  tagline: {
+    fontSize: 15,
+    color: colors.textMuted,
+    marginTop: 4,
+  },
+  
+  form: {
+    backgroundColor: colors.surface,
+    padding: spacing.l,
+    borderRadius: borderRadius.l,
+    ...shadows.medium,
+  },
+  inputGroup: { marginBottom: spacing.m },
+  inputLabel: {
+    fontSize: 14,
+    color: colors.textMuted,
+    marginBottom: spacing.s,
+    fontWeight: '500',
+  },
+  input: {
+    backgroundColor: colors.backgroundSoft,
+    padding: spacing.m,
+    borderRadius: borderRadius.m,
+    color: colors.text,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  forgot: { alignSelf: 'flex-end', marginBottom: spacing.l },
+  forgotText: { color: colors.primaryLight, fontSize: 14 },
+  
+  primaryBtn: { borderRadius: borderRadius.m, overflow: 'hidden', marginBottom: spacing.s },
+  primaryBtnInner: { padding: spacing.m, alignItems: 'center' },
+  primaryBtnText: { color: '#FFF', fontWeight: 'bold', fontSize: 17 },
+  
+  secondaryBtn: {
+    padding: spacing.m,
+    alignItems: 'center',
+    borderRadius: borderRadius.m,
+    borderWidth: 1,
+    borderColor: colors.primaryLight,
+  },
+  secondaryBtnText: { color: colors.primaryLight, fontWeight: '600', fontSize: 15 },
+  
+  statusCard: {
+    marginTop: spacing.l,
+    backgroundColor: colors.surface,
+    padding: spacing.m,
+    borderRadius: borderRadius.m,
+    alignItems: 'center',
+    ...shadows.soft,
+  },
+  statusIcon: { fontSize: 24, marginBottom: 8 },
+  statusText: { color: colors.text, fontWeight: '600' },
+  statusLogin: { color: colors.textMuted, marginTop: 4 },
 });

@@ -1,6 +1,6 @@
 export const beachFlirt = {
   id: 'beach_flirt',
-  title: 'Закат на пляже',
+  title: 'Небо, горящее над морем',
   genres: ['Романтика', 'Повседневность'],
   premium: false,
   scenes: [

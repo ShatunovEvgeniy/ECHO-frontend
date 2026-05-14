@@ -1,6 +1,6 @@
 export const magicCollege = {
   id: 'magic_college',
-  title: 'Первый день в Академии',
+  title: 'Тайна седьмой башни',
   genres: ['Фэнтези', 'Романтика'],
   premium: false,
   scenes: [
@@ -8,22 +8,22 @@ export const magicCollege = {
       id: 'tour_start',
       background: require('../../assets/images/bg/university.png'),
       characters: [
-        { name: 'Элиас', image: require('../../assets/images/ch/elias_avatar.webp'), position: 'left' }
+        { name: 'Ася', image: require('../../assets/images/ch/Aiko_formal_smile.png'), position: 'right' }
       ],
       dialogue: { 
-        speaker: 'Элиас', 
-        text: 'Привет! Я Элиас. Давай я проведу тебе экскурсию по нашему магическому колледжу? Здесь столько интересного!' 
+        speaker: 'Ася', 
+        text: 'Привет! Я Ася. Давай я проведу тебе экскурсию по нашему колледжу? Здесь столько интересного!' 
       },
       choices: [
-        { text: 'С радостью!', nextScene: 'tour_agree', cost: 0 },
-        { text: 'Я лучше пройдусь одна.', nextScene: 'tour_alone', cost: 0 }
+        { text: 'С радостью!', nextScene: 'tour_agree' },
+        { text: 'Я лучше пройдусь один.', nextScene: 'tour_alone' }
       ]
     },
     {
       id: 'tour_agree',
       background: require('../../assets/images/bg/university.png'),
       characters: [
-        { name: 'Элиас', image: require('../../assets/images/ch/elias_avatar.webp'), position: 'center' }
+        { name: 'Элиас', image: require('../../assets/images/ch/Aiko_formal_smile.png'), position: 'center' }
       ],
       dialogue: { 
         speaker: 'Элиас', 

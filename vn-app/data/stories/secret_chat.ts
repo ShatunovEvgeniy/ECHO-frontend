@@ -1,12 +1,12 @@
 export const secretChat = {
   id: 'secret_chat',
-  title: 'Секретный чат: Элиас',
+  title: 'Тени у ворот тории',
   genres: ['Романтика', 'Драма'],
   premium: true,
   scenes: [
     {
       id: 'chat_locked',
-      background: require('../../assets/images/bg/university.png'),
+      background: require('../../assets/images/bg/japan.jpg'),
       characters: [],
       dialogue: { 
         speaker: '🔒 Premium', 
@@ -19,7 +19,7 @@ export const secretChat = {
     },
     {
       id: 'chat_unlocked',
-      background: require('../../assets/images/bg/bedroom.jpg'),
+      background: require('../../assets/images/bg/japan.jpg'),
       characters: [
         { name: 'Элиас', image: require('../../assets/images/ch/elias_avatar.webp'), position: 'center' }
       ],
@@ -33,7 +33,7 @@ export const secretChat = {
     },
     {
       id: 'msg1',
-      background: require('../../assets/images/bg/bedroom.jpg'),
+      background: require('../../assets/images/bg/japan.jpg'),
       characters: [],
       dialogue: { 
         speaker: 'Элиас', 

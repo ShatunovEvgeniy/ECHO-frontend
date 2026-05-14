@@ -17,6 +17,27 @@ const STORY_MAP: Record<string, any> = {
   secret_chat: secretChat,
 };
 
+// // Простая анимация появления текста
+// import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
+
+// // Внутри компонента GameScreen добавьте:
+// const [textOpacity, setTextOpacity] = useState(0);
+
+// useEffect(() => {
+//   setTextOpacity(0);
+//   const timer = setTimeout(() => setTextOpacity(1), 100);
+//   return () => clearTimeout(timer);
+// }, [currentScene]);
+
+// const animatedTextStyle = useAnimatedStyle(() => ({
+//   opacity: withTiming(textOpacity, { duration: 300 }),
+// }));
+
+// // Замените <Text style={styles.text}> на:
+// <Animated.Text style={[styles.text, animatedTextStyle]}>
+//   {currentScene.dialogue.text}
+// </Animated.Text>
+
 export default function GameScreen() {
   const { id } = useLocalSearchParams();
   const { user, updateCurrency, updateProgress } = useUser();
@@ -153,13 +174,13 @@ const styles = StyleSheet.create({
   bg: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' },
   charLayer: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' },
   char: { 
-    width: Dimensions.get('window').width * 0.6, 
-    height: Dimensions.get('window').height * 0.7, 
+    width: Dimensions.get('window').width * 0.9, 
+    height: Dimensions.get('window').height * 0.9, 
     position: 'absolute', 
     bottom: 120 
   },
   posLeft: { left: -30 },
-  posRight: { right: -30 },
+  posRight: { right: -500, bottom: -50 },
   
   dialogueBox: { 
     position: 'absolute', 
@@ -167,12 +188,12 @@ const styles = StyleSheet.create({
     left: 0, 
     right: 0, 
     backgroundColor: colors.overlay, 
-    padding: spacing.l, 
+    padding: spacing.xxl, 
     borderTopLeftRadius: 20, 
     borderTopRightRadius: 20 
   },
-  speaker: { color: colors.accent, fontWeight: 'bold', fontSize: 16, marginBottom: 4 },
-  text: { color: '#FFF', fontSize: 18, lineHeight: 24, marginBottom: spacing.m },
+  speaker: { color: colors.gem, fontWeight: 'bold', fontSize: 22, marginBottom: 4 },
+  text: { color: '#FFF', fontSize: 22, lineHeight: 24, marginBottom: spacing.xl, marginTop: spacing.xs },
   
   nextBtn: { 
     alignSelf: 'flex-end', 
@@ -194,5 +215,5 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.gem
   },
-  choiceText: { color: '#FFF', fontWeight: '600' },
+  choiceText: { color: '#FFF', fontWeight: '600', fontSize: 18 },
 });

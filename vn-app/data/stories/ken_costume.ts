@@ -1,6 +1,6 @@
 export const kenCostume = {
   id: 'bedroom_scene',
-  title: 'Утро в спальне',
+  title: 'Школа уходит с солнцем',
   genres: ['Романтика', 'Повседневность'],
   premium: false,
   scenes: [

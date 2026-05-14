@@ -31,7 +31,7 @@ export default function Genres() {
         ))}
       </ScrollView>
       <TouchableOpacity style={styles.button} onPress={handleSave}>
-        <Text style={styles.buttonText}>Начать чтение</Text>
+        <Text style={styles.buttonText}>Продолжить</Text>
       </TouchableOpacity>
     </View>
   );
