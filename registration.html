@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - Визуальные Новеллы</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-logo">📚 NovelVerse</div>
+            <div class="nav-links">
+                <a href="registration.html" class="nav-btn active">Регистрация</a>
+                <a href="personalization.html" class="nav-btn">Профиль</a>
+                <a href="genres.html" class="nav-btn">Жанры</a>
+                <a href="index.html" class="nav-btn">Библиотека</a>
+            </div>
+        </nav>
+
+        <h1 class="page-title">Регистрация</h1>
+
+        <div class="card" style="max-width: 500px; margin: 0 auto;">
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label class="form-label" for="login">Логин</label>
+                    <input type="text" id="login" class="form-input" placeholder="Придумайте логин" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Пароль</label>
+                    <input type="password" id="password" class="form-input" placeholder="Придумайте пароль" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="confirmPassword">Подтвердите пароль</label>
+                    <input type="password" id="confirmPassword" class="form-input" placeholder="Повторите пароль" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Зарегистрироваться</button>
+            </form>
+
+            <p style="text-align: center; margin-top: 20px; color: var(--text-secondary);">
+                Уже есть аккаунт? <a href="#" style="color: var(--accent-color);">Войти</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const login = document.getElementById('login').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Пароли не совпадают!');
+                return;
+            }
+
+            // Сохраняем данные пользователя
+            localStorage.setItem('userLogin', login);
+            localStorage.setItem('userPassword', password);
+            localStorage.setItem('gems', '100');
+            localStorage.setItem('tickets', '5');
+
+            alert('Регистрация успешна! Теперь заполните свой профиль.');
+            window.location.href = 'personalization.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Персонализация - Визуальные Новеллы</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-logo">📚 NovelVerse</div>
+            <div class="nav-links">
+                <a href="registration.html" class="nav-btn">Регистрация</a>
+                <a href="personalization.html" class="nav-btn active">Профиль</a>
+                <a href="genres.html" class="nav-btn">Жанры</a>
+                <a href="index.html" class="nav-btn">Библиотека</a>
+            </div>
+        </nav>
+
+        <h1 class="page-title">Персонализация профиля</h1>
+
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <form id="personalizationForm">
+                <div class="form-group">
+                    <label class="form-label" for="name">Ваше имя</label>
+                    <input type="text" id="name" class="form-input" placeholder="Как к вам обращаться?" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Пол</label>
+                    <div class="radio-group">
+                        <label class="radio-option" onclick="selectRadio(this)">
+                            <input type="radio" name="sex" value="male">
+                            <span>👨 Мужской</span>
+                        </label>
+                        <label class="radio-option" onclick="selectRadio(this)">
+                            <input type="radio" name="sex" value="female">
+                            <span>👩 Женский</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="hobby">Хобби</label>
+                    <input type="text" id="hobby" class="form-input" placeholder="Ваши увлечения">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="about">О себе (свободная форма)</label>
+                    <textarea id="about" class="form-input form-textarea" placeholder="Расскажите немного о себе. Эта информация будет использоваться во время игр..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="favoriteColor">Любимый цвет</label>
+                    <input type="color" id="favoriteColor" class="form-input" style="height: 50px; padding: 5px;" value="#6c5ce7">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="birthdate">Дата рождения (необязательно)</label>
+                    <input type="date" id="birthdate" class="form-input">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Сохранить профиль</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function selectRadio(element) {
+            document.querySelectorAll('.radio-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            element.querySelector('input[type="radio"]').checked = true;
+        }
+
+        // Загрузка сохраненных данных
+        window.addEventListener('load', function() {
+            const savedName = localStorage.getItem('userName');
+            const savedSex = localStorage.getItem('userSex');
+            const savedHobby = localStorage.getItem('userHobby');
+            const savedAbout = localStorage.getItem('userAbout');
+            const savedColor = localStorage.getItem('userColor');
+            const savedBirthdate = localStorage.getItem('userBirthdate');
+
+            if (savedName) document.getElementById('name').value = savedName;
+            if (savedHobby) document.getElementById('hobby').value = savedHobby;
+            if (savedAbout) document.getElementById('about').value = savedAbout;
+            if (savedColor) document.getElementById('favoriteColor').value = savedColor;
+            if (savedBirthdate) document.getElementById('birthdate').value = savedBirthdate;
+            
+            if (savedSex) {
+                document.querySelectorAll('.radio-option').forEach(opt => {
+                    if (opt.querySelector('input').value === savedSex) {
+                        selectRadio(opt);
+                    }
+                });
+            }
+        });
+
+        document.getElementById('personalizationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const sex = document.querySelector('input[name="sex"]:checked')?.value || '';
+            const hobby = document.getElementById('hobby').value;
+            const about = document.getElementById('about').value;
+            const color = document.getElementById('favoriteColor').value;
+            const birthdate = document.getElementById('birthdate').value;
+
+            localStorage.setItem('userName', name);
+            localStorage.setItem('userSex', sex);
+            localStorage.setItem('userHobby', hobby);
+            localStorage.setItem('userAbout', about);
+            localStorage.setItem('userColor', color);
+            localStorage.setItem('userBirthdate', birthdate);
+
+            alert('Профиль сохранён! Теперь выберите предпочитаемые жанры.');
+            window.location.href = 'genres.html';
+        });
+    </script>
+</body>
+</html>

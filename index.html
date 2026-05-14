@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Библиотека новелл - Визуальные Новеллы</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-logo">📚 NovelVerse</div>
+            <div class="nav-links">
+                <a href="registration.html" class="nav-btn">Регистрация</a>
+                <a href="personalization.html" class="nav-btn">Профиль</a>
+                <a href="genres.html" class="nav-btn">Жанры</a>
+                <a href="index.html" class="nav-btn active">Библиотека</a>
+            </div>
+        </nav>
+
+        <!-- Currency Bar -->
+        <div class="currency-bar">
+            <div class="currency-item">
+                <span class="currency-icon">💎</span>
+                <span id="gemsCount">100</span>
+                <span>Гемов</span>
+            </div>
+            <div class="currency-item">
+                <span class="currency-icon">🎫</span>
+                <span id="ticketsCount">5</span>
+                <span>Билетов</span>
+            </div>
+            <div class="currency-item" style="margin-left: auto;">
+                <span class="currency-icon">👤</span>
+                <span id="userNameDisplay">Гость</span>
+            </div>
+        </div>
+
+        <h1 class="page-title">Библиотека новелл</h1>
+
+        <div class="novel-grid" id="novelGrid">
+            <!-- Novel 1 -->
+            <div class="novel-card" onclick="startGame('mystery')">
+                <div class="novel-cover">🏰</div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Тайна старого особняка</h3>
+                    <p class="novel-genre">🔍 Детектив, 👻 Ужасы</p>
+                </div>
+            </div>
+
+            <!-- Novel 2 -->
+            <div class="novel-card" onclick="startGame('romance')">
+                <div class="novel-cover">💕</div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Весенняя романтика</h3>
+                    <p class="novel-genre">💕 Романтика, ☕ Повседневность</p>
+                </div>
+            </div>
+
+            <!-- Novel 3 -->
+            <div class="novel-card" onclick="startGame('fantasy')">
+                <div class="novel-cover">🐉</div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Последний дракон</h3>
+                    <p class="novel-genre">🐉 Фэнтези, ⚔️ Приключения</p>
+                </div>
+            </div>
+
+            <!-- Novel 4 -->
+            <div class="novel-card" onclick="startGame('scifi')">
+                <div class="novel-cover">🚀</div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Звёздный путь</h3>
+                    <p class="novel-genre">🚀 Научная фантастика, 💥 Экшен</p>
+                </div>
+            </div>
+
+            <!-- Novel 5 -->
+            <div class="novel-card" onclick="startGame('school')">
+                <div class="novel-cover">🏫</div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Школьные годы чудесные</h3>
+                    <p class="novel-genre">🏫 Школьный, 😄 Комедия</p>
+                </div>
+            </div>
+
+            <!-- Novel 6 -->
+            <div class="novel-card" onclick="startGame('historical')">
+                <div class="novel-cover">⚔️</div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Самурайская честь</h3>
+                    <p class="novel-genre">🏰 Исторический, 🎭 Драма</p>
+                </div>
+            </div>
+
+            <!-- Novel 7 -->
+            <div class="novel-card" onclick="startGame('supernatural')">
+                <div class="novel-cover">🌙</div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Лунный свет</h3>
+                    <p class="novel-genre">🌙 Сверхъестественное, 💕 Романтика</p>
+                </div>
+            </div>
+
+            <!-- Novel 8 -->
+            <div class="novel-card" onclick="startGame('psychological')">
+                <div class="novel-cover">🧠</div>
+                <div class="novel-info">
+                    <h3 class="novel-title">В глубине сознания</h3>
+                    <p class="novel-genre">🧠 Психологический, 🔍 Детектив</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Загрузка данных пользователя
+        window.addEventListener('load', function() {
+            const gems = localStorage.getItem('gems') || '100';
+            const tickets = localStorage.getItem('tickets') || '5';
+            const userName = localStorage.getItem('userName') || 'Гость';
+
+            document.getElementById('gemsCount').textContent = gems;
+            document.getElementById('ticketsCount').textContent = tickets;
+            document.getElementById('userNameDisplay').textContent = userName;
+        });
+
+        function startGame(novelType) {
+            const tickets = parseInt(localStorage.getItem('tickets') || '5');
+            
+            if (tickets <= 0) {
+                alert('У вас нет билетов! Купите билеты за гемы.');
+                return;
+            }
+
+            // Сохраняем выбранную новеллу и уменьшаем количество билетов
+            localStorage.setItem('currentNovel', novelType);
+            localStorage.setItem('tickets', (tickets - 1).toString());
+            
+            // Обновляем отображение
+            document.getElementById('ticketsCount').textContent = tickets - 1;
+            
+            // Переходим к игре
+            window.location.href = 'game.html';
+        }
+    </script>
+</body>
+</html>

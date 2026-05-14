@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра - Визуальные Новеллы</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body style="background: transparent;">
+    <div class="container" style="padding: 10px;">
+        <nav class="navbar" style="margin-bottom: 10px;">
+            <div class="nav-logo">📚 NovelVerse</div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-btn">В библиотеку</a>
+            </div>
+        </nav>
+
+        <div class="game-container">
+            <!-- Background -->
+            <div class="game-background" id="gameBackground"></div>
+
+            <!-- Characters -->
+            <div class="game-characters" id="gameCharacters">
+                <div class="character" id="character1">👤</div>
+            </div>
+
+            <!-- Dialogue Box -->
+            <div class="game-dialogue">
+                <div class="dialogue-box">
+                    <div class="speaker-name" id="speakerName">???</div>
+                    <div class="dialogue-text" id="dialogueText">Загрузка...</div>
+                </div>
+
+                <!-- Choice Buttons (hidden by default) -->
+                <div class="choice-buttons" id="choiceButtons" style="display: none;">
+                    <!-- Choices will be inserted here -->
+                </div>
+
+                <!-- Continue Button -->
+                <button class="btn btn-primary" id="continueBtn" onclick="nextDialogue()" style="float: right;">
+                    Далее →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Stories data
+        const stories = {
+            mystery: {
+                background: 'linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)',
+                characters: ['🕵️', '👩', '👴'],
+                scenes: [
+                    {
+                        speaker: 'Детектив',
+                        text: 'Вы стоите перед старым особняком. Туман окутывает здание, создавая мрачную атмосферу.',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Детектив',
+                        text: 'Кто-то сказал мне, что здесь произошло нечто странное. Нужно осмотреться.',
+                        character: 0,
+                        choices: [
+                            { text: 'Войти через главный вход', next: 2 },
+                            { text: 'Обойти вокруг дома', next: 3 }
+                        ]
+                    },
+                    {
+                        speaker: '',
+                        text: 'Вы вошли в тёмный коридор. Скрип половиц эхом разносится по всему дому...',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: '???',
+                        text: '*Шёпот откуда-то сверху* Помогите...',
+                        character: 1,
+                        choices: [
+                            { text: 'Подняться наверх', next: 4 },
+                            { text: 'Позвать на помощь', next: 5 }
+                        ]
+                    },
+                    {
+                        speaker: 'Детектив',
+                        text: 'На втором этаже вы нашли старую женщину. Она выглядит испуганной.',
+                        character: 2,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Старушка',
+                        text: 'Спасибо, что пришли! Здесь происходит что-то ужасное по ночам...',
+                        character: 2,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Детектив',
+                        text: 'Конец демо-версии. Спасибо за игру!',
+                        character: 0,
+                        choices: [
+                            { text: 'Начать сначала', next: 0 },
+                            { text: 'Выйти в библиотеку', action: 'exit' }
+                        ]
+                    }
+                ]
+            },
+            romance: {
+                background: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
+                characters: ['👨', '👩', '🌸'],
+                scenes: [
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Весеннее утро. Цветение сакуры наполняет воздух сладким ароматом.',
+                        character: 2,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Вы',
+                        text: 'Какой прекрасный день! Идеально подходит для прогулки в парке.',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: '???',
+                        text: 'Ой, простите! Я не заметила вас...',
+                        character: 1,
+                        choices: [
+                            { text: 'Извиниться', next: 3 },
+                            { text: 'Предложить познакомиться', next: 4 }
+                        ]
+                    },
+                    {
+                        speaker: 'Вы',
+                        text: 'Ничего страшного! Погода сегодня просто замечательная, правда?',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Незнакомка',
+                        text: 'Да... Меня зовут Алина. А вас?',
+                        character: 1,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Так началось ваше знакомство... Конец демо-версии!',
+                        character: 2,
+                        choices: [
+                            { text: 'Начать сначала', next: 0 },
+                            { text: 'Выйти в библиотеку', action: 'exit' }
+                        ]
+                    }
+                ]
+            },
+            fantasy: {
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                characters: ['🧙', '🐉', '⚔️'],
+                scenes: [
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'В далёком королевстве, где магия течёт в каждом уголке...',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Мудрец',
+                        text: 'Герой! Ты пришёл! Последний дракон проснулся и угрожает нашему миру.',
+                        character: 0,
+                        choices: [
+                            { text: 'Я готов сразиться!', next: 2 },
+                            { text: 'А есть другой способ?', next: 3 }
+                        ]
+                    },
+                    {
+                        speaker: 'Мудрец',
+                        text: 'Твоя смелость восхищает! Вот твой меч.',
+                        character: 2,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Мудрец',
+                        text: 'Хмм... Возможно, ты сможешь договориться с драконом.',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Конец демо-версии. Продолжение следует!',
+                        character: 1,
+                        choices: [
+                            { text: 'Начать сначала', next: 0 },
+                            { text: 'Выйти в библиотеку', action: 'exit' }
+                        ]
+                    }
+                ]
+            },
+            scifi: {
+                background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 100%)',
+                characters: ['👨‍🚀', '🤖', '🛸'],
+                scenes: [
+                    {
+                        speaker: 'Компьютер',
+                        text: 'Система активирована. Добро пожаловать на борт космического корабля "Звезда".',
+                        character: 1,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Капитан',
+                        text: 'Мы получили странный сигнал из глубины космоса. Нужно исследовать.',
+                        character: 0,
+                        choices: [
+                            { text: 'Отправиться к источнику сигнала', next: 2 },
+                            { text: 'Сначала провести диагностику', next: 3 }
+                        ]
+                    },
+                    {
+                        speaker: 'Компьютер',
+                        text: 'Координаты установлены. Прыжок в гиперпространство через 10 секунд...',
+                        character: 1,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Капитан',
+                        text: 'Осторожность никогда не помешает. Проверь все системы.',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Конец демо-версии космической одиссеи!',
+                        character: 2,
+                        choices: [
+                            { text: 'Начать сначала', next: 0 },
+                            { text: 'Выйти в библиотеку', action: 'exit' }
+                        ]
+                    }
+                ]
+            },
+            school: {
+                background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
+                characters: ['👨‍🎓', '👩‍🎓', '📚'],
+                scenes: [
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Первый день в новой школе. Волнение охватывает тебя.',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Вы',
+                        text: 'Надеюсь, я смогу найти здесь друзей...',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Одноклассница',
+                        text: 'Привет! Ты новенький? Я могу показать тебе школу!',
+                        character: 1,
+                        choices: [
+                            { text: 'С радостью принять предложение', next: 3 },
+                            { text: 'Вежливо отказаться', next: 4 }
+                        ]
+                    },
+                    {
+                        speaker: 'Вы',
+                        text: 'Да, спасибо! Это было бы здорово!',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Так началась ваша школьная история! Конец демо-версии.',
+                        character: 1,
+                        choices: [
+                            { text: 'Начать сначала', next: 0 },
+                            { text: 'Выйти в библиотеку', action: 'exit' }
+                        ]
+                    }
+                ]
+            },
+            historical: {
+                background: 'linear-gradient(135deg, #8B4513 0%, #DAA520 100%)',
+                characters: ['⚔️', '🏯', '👘'],
+                scenes: [
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Древняя Япония. Эпоха воюющих провинций.',
+                        character: 1,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Самурай',
+                        text: 'Честь и верность — вот что определяет истинного воина.',
+                        character: 0,
+                        choices: [
+                            { text: 'Следовать путём воина', next: 2 },
+                            { text: 'Искать путь мира', next: 3 }
+                        ]
+                    },
+                    {
+                        speaker: 'Самурай',
+                        text: 'Твой клинок должен быть продолжением твоей души.',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Иногда лучший бой — тот, который не состоялся.',
+                        character: 2,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Конец демо-версии исторической саги!',
+                        character: 1,
+                        choices: [
+                            { text: 'Начать сначала', next: 0 },
+                            { text: 'Выйти в библиотеку', action: 'exit' }
+                        ]
+                    }
+                ]
+            },
+            supernatural: {
+                background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+                characters: ['🌙', '🧛', '🦇'],
+                scenes: [
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Полночь. Луна освещает древний замок своим серебристым светом.',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: '???',
+                        text: 'Ты пришла... Я ждал тебя целую вечность.',
+                        character: 1,
+                        choices: [
+                            { text: 'Кто ты?', next: 2 },
+                            { text: 'Что тебе нужно?', next: 3 }
+                        ]
+                    },
+                    {
+                        speaker: 'Незнакомец',
+                        text: 'Я — тот, кто охраняет границу между мирами.',
+                        character: 1,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Незнакомец',
+                        text: 'Твоя судьба связана с этим местом...',
+                        character: 1,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Конец демо-версии сверхъестественной истории!',
+                        character: 2,
+                        choices: [
+                            { text: 'Начать сначала', next: 0 },
+                            { text: 'Выйти в библиотеку', action: 'exit' }
+                        ]
+                    }
+                ]
+            },
+            psychological: {
+                background: 'linear-gradient(135deg, #1e1e2e 0%, #4a4a6a 100%)',
+                characters: ['🧠', '🪞', '❓'],
+                scenes: [
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Граница между реальностью и иллюзией становится всё тоньше...',
+                        character: 2,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Голос',
+                        text: 'Ты уверен, что это реально? Или это всего лишь сон?',
+                        character: 0,
+                        choices: [
+                            { text: 'Это реально!', next: 2 },
+                            { text: 'Я не уверен...', next: 3 }
+                        ]
+                    },
+                    {
+                        speaker: 'Голос',
+                        text: 'Интересно... Но что такое реальность?',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Голос',
+                        text: 'Сомнение — первый шаг к истине.',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Конец демо-версии психологического триллера!',
+                        character: 1,
+                        choices: [
+                            { text: 'Начать сначала', next: 0 },
+                            { text: 'Выйти в библиотеку', action: 'exit' }
+                        ]
+                    }
+                ]
+            },
+            horror: {
+                background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 100%)',
+                characters: ['👻', '💀', '🕯️'],
+                scenes: [
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Ты застрял в заброшенной больнице. Темнота поглощает всё вокруг.',
+                        character: 2,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Вы',
+                        text: 'Нужно найти выход... И держаться подальше от шума.',
+                        character: 0,
+                        choices: [
+                            { text: 'Идти на звук шагов', next: 2 },
+                            { text: 'Спрятаться в шкафу', next: 3 }
+                        ]
+                    },
+                    {
+                        speaker: '???',
+                        text: '*Приближающиеся шаги...* Кто здесь?',
+                        character: 1,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Вы',
+                        text: 'Тишина... Кажется, прошло мимо.',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Конец демо-версии хоррора! Выжил ли герой?',
+                        character: 0,
+                        choices: [
+                            { text: 'Начать сначала', next: 0 },
+                            { text: 'Выйти в библиотеку', action: 'exit' }
+                        ]
+                    }
+                ]
+            },
+            comedy: {
+                background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)',
+                characters: ['😄', '🤡', '🎭'],
+                scenes: [
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Обычный день превратился в цепь комических событий...',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Вы',
+                        text: 'Ну почему всё идёт не по плану?!',
+                        character: 0,
+                        choices: [
+                            { text: 'Посмеяться над ситуацией', next: 2 },
+                            { text: 'Расстроиться', next: 3 }
+                        ]
+                    },
+                    {
+                        speaker: 'Друг',
+                        text: 'Ха-ха! Зато будет что вспомнить!',
+                        character: 1,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Вы',
+                        text: 'Да... Через неделю это будет смешно.',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Конец демо-версии комедии! Улыбайтесь чаще!',
+                        character: 0,
+                        choices: [
+                            { text: 'Начать сначала', next: 0 },
+                            { text: 'Выйти в библиотеку', action: 'exit' }
+                        ]
+                    }
+                ]
+            },
+            drama: {
+                background: 'linear-gradient(135deg, #2d3436 0%, #636e72 100%)',
+                characters: ['🎭', '💔', '🌧️'],
+                scenes: [
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Жизнь полна взлётов и падений. Сегодня — особенно трудный день.',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Вы',
+                        text: 'Как же всё сложно... Что делать дальше?',
+                        character: 0,
+                        choices: [
+                            { text: 'Попросить помощи у друзей', next: 2 },
+                            { text: 'Разобраться самостоятельно', next: 3 }
+                        ]
+                    },
+                    {
+                        speaker: 'Друг',
+                        text: 'Мы с тобой! Вместе мы справимся.',
+                        character: 1,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Вы',
+                        text: 'Спасибо... Мне нужно время подумать.',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Конец демо-версии драмы. Жизнь продолжается!',
+                        character: 2,
+                        choices: [
+                            { text: 'Начать сначала', next: 0 },
+                            { text: 'Выйти в библиотеку', action: 'exit' }
+                        ]
+                    }
+                ]
+            },
+            adventure: {
+                background: 'linear-gradient(135deg, #27ae60 0%, #2ecc71 100%)',
+                characters: ['⚔️', '🗺️', '🏆'],
+                scenes: [
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Новое приключение ждёт! Карта сокровищ в твоих руках.',
+                        character: 1,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Вы',
+                        text: 'Наконец-то! Настоящее приключение начинается!',
+                        character: 0,
+                        choices: [
+                            { text: 'Отправиться в путь немедленно', next: 2 },
+                            { text: 'Подготовиться как следует', next: 3 }
+                        ]
+                    },
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Дорога полна опасностей, но награда того стоит!',
+                        character: 2,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Вы',
+                        text: 'Лучшая подготовка — это действие!',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Конец демо-версии приключения! Вперёд к новым горизонтам!',
+                        character: 2,
+                        choices: [
+                            { text: 'Начать сначала', next: 0 },
+                            { text: 'Выйти в библиотеку', action: 'exit' }
+                        ]
+                    }
+                ]
+            },
+            slice_of_life: {
+                background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+                characters: ['☕', '📖', '🌿'],
+                scenes: [
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Уютное утро. Кофе, книга и тишина...',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Вы',
+                        text: 'Иногда простые моменты — самые ценные.',
+                        character: 0,
+                        choices: [
+                            { text: 'Продолжить читать', next: 2 },
+                            { text: 'Приготовить ещё кофе', next: 3 }
+                        ]
+                    },
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Страница за страницей, мир погружается в историю.',
+                        character: 1,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Вы',
+                        text: 'Идеальный день для отдыха.',
+                        character: 0,
+                        choices: null
+                    },
+                    {
+                        speaker: 'Рассказчик',
+                        text: 'Конец демо-версии повседневности. Наслаждайтесь моментом!',
+                        character: 2,
+                        choices: [
+                            { text: 'Начать сначала', next: 0 },
+                            { text: 'Выйти в библиотеку', action: 'exit' }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        let currentSceneIndex = 0;
+        let currentStory = null;
+
+        function loadStory() {
+            const novelType = localStorage.getItem('currentNovel') || 'mystery';
+            currentStory = stories[novelType] || stories.mystery;
+            currentSceneIndex = 0;
+            
+            document.getElementById('gameBackground').style.background = currentStory.background;
+            showScene(currentSceneIndex);
+        }
+
+        function showScene(index) {
+            if (index >= currentStory.scenes.length) {
+                index = currentStory.scenes.length - 1;
+            }
+            
+            const scene = currentStory.scenes[index];
+            
+            document.getElementById('speakerName').textContent = scene.speaker;
+            document.getElementById('dialogueText').textContent = scene.text;
+            
+            // Update character
+            const charElement = document.getElementById('character1');
+            if (scene.character !== undefined && currentStory.characters[scene.character]) {
+                charElement.textContent = currentStory.characters[scene.character];
+            }
+            
+            // Handle choices
+            const choiceButtons = document.getElementById('choiceButtons');
+            const continueBtn = document.getElementById('continueBtn');
+            
+            if (scene.choices && scene.choices.length > 0) {
+                choiceButtons.style.display = 'flex';
+                continueBtn.style.display = 'none';
+                
+                choiceButtons.innerHTML = '';
+                scene.choices.forEach(choice => {
+                    const btn = document.createElement('button');
+                    btn.className = 'choice-btn';
+                    btn.textContent = choice.text;
+                    btn.onclick = () => makeChoice(choice);
+                    choiceButtons.appendChild(btn);
+                });
+            } else {
+                choiceButtons.style.display = 'none';
+                continueBtn.style.display = 'inline-block';
+            }
+        }
+
+        function makeChoice(choice) {
+            if (choice.action === 'exit') {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            currentSceneIndex = choice.next;
+            showScene(currentSceneIndex);
+        }
+
+        function nextDialogue() {
+            currentSceneIndex++;
+            if (currentSceneIndex >= currentStory.scenes.length) {
+                currentSceneIndex = 0;
+            }
+            showScene(currentSceneIndex);
+        }
+
+        // Initialize game
+        window.addEventListener('load', loadStory);
+    </script>
+</body>
+</html>

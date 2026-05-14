@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор жанров - Визуальные Новеллы</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-logo">📚 NovelVerse</div>
+            <div class="nav-links">
+                <a href="registration.html" class="nav-btn">Регистрация</a>
+                <a href="personalization.html" class="nav-btn">Профиль</a>
+                <a href="genres.html" class="nav-btn active">Жанры</a>
+                <a href="index.html" class="nav-btn">Библиотека</a>
+            </div>
+        </nav>
+
+        <h1 class="page-title">Предпочитаемые жанры</h1>
+
+        <div class="card">
+            <p style="text-align: center; margin-bottom: 30px; color: var(--text-secondary);">
+                Выберите жанры, которые вам интересны. Это поможет нам подобрать для вас лучшие новеллы.
+            </p>
+
+            <div class="genre-tags" id="genreTags">
+                <div class="genre-tag" data-genre="romance">💕 Романтика</div>
+                <div class="genre-tag" data-genre="fantasy">🐉 Фэнтези</div>
+                <div class="genre-tag" data-genre="scifi">🚀 Научная фантастика</div>
+                <div class="genre-tag" data-genre="mystery">🔍 Детектив</div>
+                <div class="genre-tag" data-genre="horror">👻 Ужасы</div>
+                <div class="genre-tag" data-genre="comedy">😄 Комедия</div>
+                <div class="genre-tag" data-genre="drama">🎭 Драма</div>
+                <div class="genre-tag" data-genre="adventure">⚔️ Приключения</div>
+                <div class="genre-tag" data-genre="slice_of_life">☕ Повседневность</div>
+                <div class="genre-tag" data-genre="historical">🏰 Исторический</div>
+                <div class="genre-tag" data-genre="psychological">🧠 Психологический</div>
+                <div class="genre-tag" data-genre="action">💥 Экшен</div>
+                <div class="genre-tag" data-genre="school">🏫 Школьный</div>
+                <div class="genre-tag" data-genre="supernatural">🌙 Сверхъестественное</div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="btn btn-primary" onclick="saveGenres()">Сохранить выбор</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Загрузка сохраненных жанров
+        window.addEventListener('load', function() {
+            const savedGenres = JSON.parse(localStorage.getItem('userGenres') || '[]');
+            document.querySelectorAll('.genre-tag').forEach(tag => {
+                if (savedGenres.includes(tag.dataset.genre)) {
+                    tag.classList.add('selected');
+                }
+            });
+        });
+
+        // Обработка клика по жанру
+        document.querySelectorAll('.genre-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                this.classList.toggle('selected');
+            });
+        });
+
+        function saveGenres() {
+            const selectedGenres = [];
+            document.querySelectorAll('.genre-tag.selected').forEach(tag => {
+                selectedGenres.push(tag.dataset.genre);
+            });
+
+            if (selectedGenres.length === 0) {
+                alert('Выберите хотя бы один жанр!');
+                return;
+            }
+
+            localStorage.setItem('userGenres', JSON.stringify(selectedGenres));
+            alert('Жанры сохранены! Добро пожаловать в библиотеку.');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
