@@ -1,0 +1,414 @@
+/* Modern Circular Style - Common Styles */
+:root {
+    --primary-color: #6c5ce7;
+    --secondary-color: #a29bfe;
+    --accent-color: #fd79a8;
+    --background-dark: #1e1e2e;
+    --background-card: #2d2d44;
+    --text-primary: #ffffff;
+    --text-secondary: #b4b4c4;
+    --success: #00b894;
+    --warning: #fdcb6e;
+    --danger: #ff7675;
+    --border-radius-large: 30px;
+    --border-radius-medium: 20px;
+    --border-radius-small: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--background-dark) 0%, #2d2d44 100%);
+    min-height: 100vh;
+    color: var(--text-primary);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Navigation */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(45, 45, 68, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius-large);
+    margin-bottom: 30px;
+}
+
+.nav-logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-btn {
+    padding: 12px 24px;
+    background: transparent;
+    border: 2px solid var(--secondary-color);
+    color: var(--text-primary);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.nav-btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.nav-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Cards */
+.card {
+    background: var(--background-card);
+    border-radius: var(--border-radius-large);
+    padding: 30px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 15px 25px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid transparent;
+    border-radius: 50px;
+    color: var(--text-primary);
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.form-textarea {
+    border-radius: var(--border-radius-medium);
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23b4b4c4' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 25px center;
+    padding-right: 50px;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 25px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.radio-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.radio-option input[type="radio"] {
+    display: none;
+}
+
+.radio-option.selected {
+    background: var(--primary-color);
+}
+
+/* Buttons */
+.btn {
+    padding: 15px 40px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(108, 92, 231, 0.4);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 2px solid var(--secondary-color);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    background: var(--secondary-color);
+}
+
+/* Genre Tags */
+.genre-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.genre-tag {
+    padding: 12px 25px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid transparent;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.genre-tag:hover {
+    border-color: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+.genre-tag.selected {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Novel Grid */
+.novel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.novel-card {
+    background: var(--background-card);
+    border-radius: var(--border-radius-large);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.novel-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.novel-cover {
+    height: 350px;
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+}
+
+.novel-info {
+    padding: 20px;
+}
+
+.novel-title {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.novel-genre {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* Currency Display */
+.currency-bar {
+    display: flex;
+    gap: 20px;
+    padding: 15px 30px;
+    background: rgba(45, 45, 68, 0.8);
+    border-radius: 50px;
+    margin-bottom: 20px;
+}
+
+.currency-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50px;
+}
+
+.currency-icon {
+    font-size: 24px;
+}
+
+/* Game Interface */
+.game-container {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 100px);
+    border-radius: var(--border-radius-large);
+    overflow: hidden;
+}
+
+.game-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-size: cover;
+    background-position: center;
+}
+
+.game-characters {
+    position: absolute;
+    bottom: 250px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+}
+
+.character {
+    height: 400px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 100px;
+}
+
+.game-dialogue {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px;
+    background: rgba(45, 45, 68, 0.95);
+    border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
+}
+
+.dialogue-box {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius-medium);
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+.speaker-name {
+    color: var(--accent-color);
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.dialogue-text {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.choice-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.choice-btn {
+    padding: 18px 30px;
+    background: rgba(108, 92, 231, 0.3);
+    border: 2px solid var(--primary-color);
+    color: var(--text-primary);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 15px;
+}
+
+.choice-btn:hover {
+    background: var(--primary-color);
+    transform: translateX(10px);
+}
+
+/* Page Titles */
+.page-title {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+    }
+    
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .novel-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .game-characters {
+        bottom: 200px;
+    }
+    
+    .character {
+        height: 250px;
+        font-size: 60px;
+    }
+}
